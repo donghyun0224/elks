@@ -19,7 +19,7 @@
 static int msdos_dir_read(inode, filp, buf, count)
      struct inode *inode;
      struct file *filp;
-     char *buf;
+     void *buf;
      int count;
 {
     return -EISDIR;
@@ -27,11 +27,11 @@ static int msdos_dir_read(inode, filp, buf, count)
 
 static int msdos_readdir(struct inode *inode,
 			 struct file *filp,
-			 char *dirent, filldir_t filldir);
+			 void *dirent, filldir_t filldir);
 
 /*@-type@*/
 
-static struct file_operations msdos_dir_operations = {
+struct file_operations msdos_dir_operations = {
 	NULL,			/* lseek - default */
 	msdos_dir_read,		/* read */
 	NULL,			/* write - bad */
@@ -173,7 +173,7 @@ int msdos_readdir(
 				unsigned char sum;
 				for (sum = 0, i = 0; i < 11; i++) {
 					//sum = (((sum&1)<<7)|((sum&0xfe)>>1));
-					asm("rorb [bp-111], 1");    /* Note the offset */
+					asm("rorb $1,-111(%bp)");    /* Note the offset */
 					sum += de->name[i];
 				}
 

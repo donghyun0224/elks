@@ -77,7 +77,7 @@ static struct super_operations msdos_sops = {
 /* Read the super block of an MS-DOS FS. */
 
 struct super_block *msdos_read_super(register struct super_block *s,
-				     char *data, int silent)
+				     void *data, int silent)
 {
 	struct buffer_head *bh;
 	register struct msdos_boot_sector *b;
